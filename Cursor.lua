@@ -1,5 +1,4 @@
 --[[
-    GD50 2019 
     Pong Remake - 
 
     -- Cursor Class --
