@@ -209,7 +209,7 @@ function love.update(dt)
                     -- keep velocity going in the same direction, but randomize it
                     if ball.dy < 0 then
                         ball.dy = -math.random(10, 150)
-                    else
+                    else 
                         ball.dy = math.random(10, 150)
                     end
 
@@ -295,9 +295,9 @@ function love.update(dt)
                 player2.dy = 0
             end
         elseif gameState == 'CPUplay' or gameState == 'CPUserve' then  
-            if ball.y > CPU.y then
+            if ball.y > CPU.y + 5 then
                 CPU.dy = PADDLE_SPEED
-            elseif ball.y < CPU.y then 
+            elseif ball.y < CPU.y - 5 then 
                 CPU.dy = -PADDLE_SPEED
             else 
                 CPU.dy = 0
