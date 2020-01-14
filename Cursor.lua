@@ -13,12 +13,14 @@
 
 Cursor = Class{}
 
-function Cursor:init(x, y, width, height)
+function Cursor:init(x, y, width, height, opts)
     self.width = width 
     self.height = height
     self.x = x
     self.y = y
-    self.option = false
+    self.option = 0
+    self.max = opts - 1
+
 
     -- Variables help to create a starting position and value for the cursor  
 end 
@@ -28,17 +30,17 @@ end
 ]]
 function Cursor:change(direction) 
     if (direction == "up") then 
-        if (self.option == false) then  
+        if (self.option == 0) then 
         else 
-            self.option = false
+            self.option = self.option - 1
             self.y = self.y - 30
-        end   
-    else
-        if (self.option) then 
+        end
+    else 
+        if (self.option == self.max) then 
         else 
-            self.option = true
+            self.option = self.option + 1
             self.y = self.y + 30
-        end 
+        end
     end 
 end
 
