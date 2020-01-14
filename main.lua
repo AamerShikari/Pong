@@ -42,10 +42,6 @@ require 'Ball'
 -- the user is looking to play, very simple yet extremely fundamental
 require 'Cursor'
 
--- our numCursor class, is a structure that helps determine which difficulty/color 
--- the use wants their opponent/paddle to be.
-require 'numCursor'
-
 -- size of our actual window
 WINDOW_WIDTH = 1280
 WINDOW_HEIGHT = 720
@@ -108,9 +104,9 @@ function love.load()
     ball = Ball(VIRTUAL_WIDTH / 2 - 2, VIRTUAL_HEIGHT / 2 - 2, 4, 4)
 
     -- creates an instance of each cursor for start screen
-    cursor = Cursor(VIRTUAL_WIDTH / 2 - 36, VIRTUAL_HEIGHT / 2 - 28, 4, 2)
+    cursor = Cursor(VIRTUAL_WIDTH / 2 - 36, VIRTUAL_HEIGHT / 2 - 28, 4, 2, 2)
 
-    numCursor = numCursor(VIRTUAL_WIDTH / 2 - 36, VIRTUAL_HEIGHT / 2 - 28, 4, 2)
+    numCursor = Cursor(VIRTUAL_WIDTH / 2 - 36, VIRTUAL_HEIGHT / 2 - 28, 4, 2, 3)
 
     -- initialize score variables
     player1Score = 0
@@ -370,7 +366,7 @@ function love.keypressed(key)
     -- transition to the next appropriate state
     elseif key == 'enter' or key == 'return' then
         if gameState == 'intro' then 
-            if cursor:getOpt() then 
+            if cursor:getOpt() == 1 then 
                 gameState = 'diffSelect'
                 servingPlayer = 2
             else 
