@@ -97,6 +97,8 @@ function love.load()
     -- initialize our player and CPU's paddles; make them global so that they can be
     -- detected by other functions and modules
     player1 = Paddle(10, 30, 5, 20)
+    player1Easy = Paddle(10, 30, 5, 50)
+    player1Hard = Paddle(10, 30, 5, 35)
     player2 = Paddle(VIRTUAL_WIDTH - 10, VIRTUAL_HEIGHT - 30, 5, 20)
     CPU = Paddle(VIRTUAL_WIDTH - 19, VIRTUAL_HEIGHT - 30, 5, 20)
 
@@ -106,14 +108,14 @@ function love.load()
     -- creates an instance of each cursor for start screen
     cursor = Cursor(VIRTUAL_WIDTH / 2 - 36, VIRTUAL_HEIGHT / 2 - 28, 4, 2, 2)
 
-    numCursor = Cursor(VIRTUAL_WIDTH / 2 - 36, VIRTUAL_HEIGHT / 2 - 28, 4, 2, 3)
+    numCursor = Cursor(VIRTUAL_WIDTH / 2 - 48, VIRTUAL_HEIGHT / 2 - 28, 4, 2, 3)
 
     -- initialize score variables
     player1Score = 0
     player2Score = 0
 
     -- initialize CPU difficulty
-    difficulty = 'easy'
+    difficulty = 'impo'
 
     -- either going to be 1 or 2; whomever is scored on gets to serve the
     -- following turn
@@ -205,18 +207,49 @@ function love.update(dt)
             -- detect ball collision with paddles, reversing dx if true and
             -- slightly increasing it, then altering the dy based on the position
             -- at which it collided, then playing a sound effect
-            if ball:collides(player1) then
-                ball.dx = -ball.dx * 1.09
-                ball.x = player1.x + 5
+            if gameState == 'play' or difficulty == 'impo' then
+                if ball:collides(player1) then
+                    ball.dx = -ball.dx * 1.09
+                    ball.x = player1.x + 5
 
-                -- keep velocity going in the same direction, but randomize it
-                if ball.dy < 0 then
-                    ball.dy = -math.random(10, 150)
-                else
-                    ball.dy = math.random(10, 150)
+                    -- keep velocity going in the same direction, but randomize it
+                    if ball.dy < 0 then
+                        ball.dy = -math.random(10, 150)
+                    else
+                        ball.dy = math.random(10, 150)
+                    end
+
+                    sounds['paddle_hit']:play()
+                end
+            elseif difficulty == 'hard' then 
+                if ball:collides(player1Hard) then
+                    ball.dx = -ball.dx * 1.09
+                    ball.x = player1.x + 5
+
+                    -- keep velocity going in the same direction, but randomize it
+                    if ball.dy < 0 then
+                        ball.dy = -math.random(10, 150)
+                    else
+                        ball.dy = math.random(10, 150)
+                    end
+
+                    sounds['paddle_hit']:play()
+                end
+            else
+                if ball:collides(player1Easy) then
+                    ball.dx = -ball.dx * 1.09
+                    ball.x = player1.x + 5
+
+                    -- keep velocity going in the same direction, but randomize it
+                    if ball.dy < 0 then
+                        ball.dy = -math.random(10, 150)
+                    else
+                        ball.dy = math.random(10, 150)
+                    end
+
+                    sounds['paddle_hit']:play()
                 end
 
-                sounds['paddle_hit']:play()
             end
             if gameState == 'play' then
                 if ball:collides(player2) then
@@ -309,11 +342,25 @@ function love.update(dt)
         --
         -- player 1
         if love.keyboard.isDown('w') then
-            player1.dy = -PADDLE_SPEED
+            if difficulty == 'impo' or gameState == 'play' then
+                player1.dy = -PADDLE_SPEED
+            elseif difficulty == 'hard' then 
+                player1Hard.dy = -PADDLE_SPEED
+            else 
+                player1Easy.dy = -PADDLE_SPEED
+            end
         elseif love.keyboard.isDown('s') then
-            player1.dy = PADDLE_SPEED
+            if difficulty == 'impo' or gameState == 'play' then
+                player1.dy = PADDLE_SPEED
+            elseif difficulty == 'hard' then 
+                player1Hard.dy = PADDLE_SPEED
+            else 
+                player1Easy.dy = PADDLE_SPEED
+            end
         else
             player1.dy = 0
+            player1Easy.dy = 0
+            player1Hard.dy = 0
         end
 
         -- player 2
@@ -326,13 +373,31 @@ function love.update(dt)
                 player2.dy = 0
             end
         elseif gameState == 'CPUplay' or gameState == 'CPUserve' then  
-            if ball.y > CPU.y + 5 then
-                CPU.dy = PADDLE_SPEED
-            elseif ball.y < CPU.y - 5 then 
-                CPU.dy = -PADDLE_SPEED
-            else 
-                CPU.dy = 0
-            end 
+            if difficulty == 'easy' then
+                if ball.y > CPU.y + 5 then
+                    CPU.dy = PADDLE_SPEED
+                elseif ball.y < CPU.y - 5 then 
+                    CPU.dy = -PADDLE_SPEED
+                else 
+                    CPU.dy = 0
+                end 
+            elseif difficulty == 'hard' then 
+                if ball.y > CPU.y + 3 then 
+                    CPU.dy = PADDLE_SPEED
+                elseif ball.y < CPU.y - 3 then 
+                    CPU.dy = -PADDLE_SPEED
+                else 
+                    CPU.dy = 0
+                end 
+            else
+                if ball.y > CPU.y + 3 then 
+                    CPU.dy = PADDLE_SPEED*2
+                elseif ball.y < CPU.y - 3 then 
+                    CPU.dy = -PADDLE_SPEED*2
+                else 
+                    CPU.dy = 0
+                end 
+            end
         end     
 
 
@@ -344,7 +409,8 @@ function love.update(dt)
         if gameState == 'CPUplay' then 
             ball:update(dt) 
         end 
-
+        player1Easy:update(dt)
+        player1Hard:update(dt)
         player1:update(dt)
         player2:update(dt)
         CPU:update(dt)
@@ -420,7 +486,7 @@ function love.draw()
         love.graphics.printf('Select the CPU difficulty', 0, 20, VIRTUAL_WIDTH, 'center')
         love.graphics.printf('Easy', 0, VIRTUAL_HEIGHT/2 - 30, VIRTUAL_WIDTH, 'center')
         love.graphics.printf('Hard', 0, VIRTUAL_HEIGHT/2, VIRTUAL_WIDTH, 'center')
-        love.graphics.printf('Impossible', 0, VIRTUAL_HEIGHT/2 + 30, VIRTUAL_WIDTH, 'center')
+        love.graphics.printf('Almost Impossible', 0, VIRTUAL_HEIGHT/2 + 30, VIRTUAL_WIDTH, 'center')
         numCursor:render()
     elseif gameState == 'intro' then
         -- UI messages
@@ -491,7 +557,13 @@ end
 ]]
 function gameDisplay() 
     displayScore()
-    player1:render() 
+    if difficulty == 'easy' then 
+        player1Easy:render()
+    elseif difficulty == 'hard' then 
+        player1Hard:render()
+    else
+        player1:render() 
+    end
     ball:render()
     if gameState == 'CPUserve' or gameState == 'CPUplay' then 
         CPU:render() 
