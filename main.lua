@@ -42,6 +42,10 @@ require 'Ball'
 -- the user is looking to play, very simple yet extremely fundamental
 require 'Cursor'
 
+-- our numCursor class, is a structure that helps determine which difficulty/color 
+-- the use wants their opponent/paddle to be.
+require 'numCursor'
+
 -- size of our actual window
 WINDOW_WIDTH = 1280
 WINDOW_HEIGHT = 720
@@ -103,16 +107,24 @@ function love.load()
     -- place a ball in the middle of the screen
     ball = Ball(VIRTUAL_WIDTH / 2 - 2, VIRTUAL_HEIGHT / 2 - 2, 4, 4)
 
-    -- creates an instance of the cursor for start screen
+    -- creates an instance of each cursor for start screen
     cursor = Cursor(VIRTUAL_WIDTH / 2 - 36, VIRTUAL_HEIGHT / 2 - 28, 4, 2)
+
+    numCursor = numCursor(VIRTUAL_WIDTH / 2 - 36, VIRTUAL_HEIGHT / 2 - 28, 4, 2)
 
     -- initialize score variables
     player1Score = 0
     player2Score = 0
 
+    -- initialize CPU difficulty
+    difficulty = 'easy'
+
     -- either going to be 1 or 2; whomever is scored on gets to serve the
     -- following turn
     servingPlayer = 1
+
+    -- counter for frame delay
+    count = 0
 
     -- player who won the game; not set to a proper value until we reach
     -- that state in the game
@@ -147,12 +159,35 @@ end
 function love.update(dt)
     if gameState == "intro" then 
         if love.keyboard.isDown("down") then 
-            cursor:change("down")
+            if count == 5 then
+                cursor:change("down")
+                count = 0
+            end 
+            count = count + 1
         end 
         if love.keyboard.isDown("up") then 
-            cursor:change("up") 
+            if count == 5 then
+                cursor:change("up") 
+                count = 0
+            end 
+            count = count + 1
         end
         cursor:render()
+    elseif gameState == 'diffSelect' then 
+        if love.keyboard.isDown("down") then 
+            if count == 5 then 
+                numCursor:change("down")
+                count = 0
+            end 
+            count = count + 1
+        end 
+        if love.keyboard.isDown("up") then 
+            if count == 5 then 
+                numCursor:change("up") 
+                count = 0
+            end 
+            count = count + 1
+        end
     else 
         if gameState == 'serve' or gameState == 'CPUserve' then
             -- before switching to play, initialize ball's velocity based
@@ -336,11 +371,20 @@ function love.keypressed(key)
     elseif key == 'enter' or key == 'return' then
         if gameState == 'intro' then 
             if cursor:getOpt() then 
-                gameState = 'CPUserve'
+                gameState = 'diffSelect'
                 servingPlayer = 2
             else 
                 gameState = 'serve'
             end
+        elseif gameState == 'diffSelect' then 
+            gameState = 'CPUserve'
+            if numCursor:getOpt() == 0 then 
+                difficulty = 'easy'
+            elseif numCursor:getOpt() == 1 then 
+                difficulty = 'hard'
+            else
+                difficulty = 'impo'
+            end 
         elseif gameState == 'serve' then
             gameState = 'play'
         elseif gameState == 'CPUserve' and servingPlayer == 1 then 
@@ -375,14 +419,21 @@ function love.draw()
     push:start()
 
     -- render different things depending on which part of the game we're in
-    if gameState == 'intro' then
+    if gameState == 'diffSelect' then 
+        love.graphics.setFont(smallFont) 
+        love.graphics.printf('Select the CPU difficulty', 0, 20, VIRTUAL_WIDTH, 'center')
+        love.graphics.printf('Easy', 0, VIRTUAL_HEIGHT/2 - 30, VIRTUAL_WIDTH, 'center')
+        love.graphics.printf('Hard', 0, VIRTUAL_HEIGHT/2, VIRTUAL_WIDTH, 'center')
+        love.graphics.printf('Impossible', 0, VIRTUAL_HEIGHT/2 + 30, VIRTUAL_WIDTH, 'center')
+        numCursor:render()
+    elseif gameState == 'intro' then
         -- UI messages
         love.graphics.setFont(smallFont)
         love.graphics.printf('Welcome to Pong!', 0, 10, VIRTUAL_WIDTH, 'center')
         love.graphics.printf('Select a Game Mode', 0, 20, VIRTUAL_WIDTH, 'center')
         love.graphics.printf('Press Enter to begin!', 0, 30, VIRTUAL_WIDTH, 'center')
         love.graphics.printf('Two Player', 0, VIRTUAL_HEIGHT/2 - 30, VIRTUAL_WIDTH, 'center')
-        love.graphics.printf('Practice', 0, VIRTUAL_HEIGHT/2, VIRTUAL_WIDTH, 'center')
+        love.graphics.printf('One Player', 0, VIRTUAL_HEIGHT/2, VIRTUAL_WIDTH, 'center')
         cursor:render()
     elseif gameState == 'serve' or gameState == 'CPUserve' then
         -- UI messages
@@ -427,6 +478,8 @@ function love.draw()
     -- show the score before ball is rendered so it can move over the text
     if gameState == 'intro' then
         -- Only text renderings 
+    elseif gameState == 'diffSelect' then
+        -- Only text renderings
     else 
         gameDisplay()
     end 
