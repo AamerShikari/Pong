@@ -3,7 +3,7 @@
 
     -- Main Program --
 
-    Author: Aamer Shikari and Colton Ogden
+    Author: Aamer Shikari and Colton Ogden Abb
     shikariaamer@gmail.com
     cogden@cs50.harvard.edu
 
