@@ -20,6 +20,8 @@ function Cursor:init(x, y, width, height, opts)
     self.y = y
     self.option = 0
     self.max = opts - 1
+    self.startX = x
+    self.startY = y
 
 
     -- Variables help to create a starting position and value for the cursor  
@@ -53,3 +55,8 @@ function Cursor:render()
     love.graphics.rectangle('fill', self.x, self.y, self.width, self.height)
 end
 
+function Cursor:reset()
+    self.option = 0
+    self.x = self.startX
+    self.y = self.startY
+end

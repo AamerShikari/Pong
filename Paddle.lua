@@ -31,6 +31,9 @@ function Paddle:init(x, y, width, height)
     self.width = width
     self.height = height
     self.dy = 0
+    self.r = 255
+    self.g = 255
+    self.b = 255
 end
 
 function Paddle:update(dt)
@@ -57,5 +60,13 @@ end
     newest version of LÖVE2D, you can even draw rounded rectangles!
 ]]
 function Paddle:render()
+    love.graphics.setColor(self.r, self.g, self.b)
     love.graphics.rectangle('fill', self.x, self.y, self.width, self.height)
+    love.graphics.setColor(255, 255, 255)
+end
+
+function Paddle:setColor(r, g, b)
+    self.r = r
+    self.g = g
+    self.b = b
 end
