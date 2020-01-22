@@ -171,7 +171,7 @@ function love.update(dt)
             count = count + 1
         end
         cursor:render()
-    elseif gameState == 'diffSelect' then 
+    elseif gameState == 'diffSelect' or gameState == 'colorSelect1' or gameState == 'colorSelect2' then 
         if love.keyboard.isDown("down") then 
             if count == 5 then 
                 numCursor:change("down")
@@ -436,10 +436,10 @@ function love.keypressed(key)
                 gameState = 'diffSelect'
                 servingPlayer = 2
             else 
-                gameState = 'serve'
+                gameState = 'colorSelect1'
             end
         elseif gameState == 'diffSelect' then 
-            gameState = 'CPUserve'
+            gameState = 'colorSelect1'
             if numCursor:getOpt() == 0 then 
                 difficulty = 'easy'
             elseif numCursor:getOpt() == 1 then 
@@ -447,6 +447,40 @@ function love.keypressed(key)
             else
                 difficulty = 'impo'
             end 
+            numCursor:reset()
+        elseif gameState == 'colorSelect1' then 
+            gameState = 'colorSelect2'
+            if numCursor:getOpt() == 0 then 
+                player1:setColor(0, 0, 255) -- blue 
+                player1Easy:setColor(0,0,255)
+                player1Hard:setColor(0,0,255)
+            elseif numCursor:getOpt() == 1 then 
+                player1:setColor(0, 255, 0) -- Green
+                player1Easy:setColor(0,255,0)
+                player1Hard:setColor(0,255,0)
+            else 
+                player1:setColor(255, 0, 0) -- Red
+                player1Easy:setColor(255,0,0)
+                player1Hard:setColor(255,0,0)
+            end
+            numCursor:reset()
+        elseif gameState == 'colorSelect2' then 
+            if servingPlayer == 2 then 
+                gameState = 'CPUserve'
+            else 
+                gameState = 'serve' 
+            end
+            if numCursor:getOpt() == 0 then 
+                player2:setColor(0, 0, 255) -- blue 
+                CPU:setColor(0,0,255)
+            elseif numCursor:getOpt() == 1 then 
+                player2:setColor(0, 255, 0) -- Green
+                CPU:setColor(0,255,0)
+            else 
+                player2:setColor(255, 0, 0) -- Red
+                CPU:setColor(255,0,0)
+            end
+            numCursor:reset()
         elseif gameState == 'serve' then
             gameState = 'play'
         elseif gameState == 'CPUserve' and servingPlayer == 1 then 
@@ -481,14 +515,7 @@ function love.draw()
     push:start()
 
     -- render different things depending on which part of the game we're in
-    if gameState == 'diffSelect' then 
-        love.graphics.setFont(smallFont) 
-        love.graphics.printf('Select the CPU difficulty', 0, 20, VIRTUAL_WIDTH, 'center')
-        love.graphics.printf('Easy', 0, VIRTUAL_HEIGHT/2 - 30, VIRTUAL_WIDTH, 'center')
-        love.graphics.printf('Hard', 0, VIRTUAL_HEIGHT/2, VIRTUAL_WIDTH, 'center')
-        love.graphics.printf('Almost Impossible', 0, VIRTUAL_HEIGHT/2 + 30, VIRTUAL_WIDTH, 'center')
-        numCursor:render()
-    elseif gameState == 'intro' then
+    if gameState == 'intro' then
         -- UI messages
         love.graphics.setFont(smallFont)
         love.graphics.printf('Welcome to Pong!', 0, 10, VIRTUAL_WIDTH, 'center')
@@ -497,6 +524,29 @@ function love.draw()
         love.graphics.printf('Two Player', 0, VIRTUAL_HEIGHT/2 - 30, VIRTUAL_WIDTH, 'center')
         love.graphics.printf('One Player', 0, VIRTUAL_HEIGHT/2, VIRTUAL_WIDTH, 'center')
         cursor:render()
+    elseif gameState == 'diffSelect' then 
+        love.graphics.setFont(smallFont) 
+        love.graphics.printf('Select the CPU difficulty', 0, 20, VIRTUAL_WIDTH, 'center')
+        love.graphics.printf('Easy', 0, VIRTUAL_HEIGHT/2 - 30, VIRTUAL_WIDTH, 'center')
+        love.graphics.printf('Hard', 0, VIRTUAL_HEIGHT/2, VIRTUAL_WIDTH, 'center')
+        love.graphics.printf('Almost Impossible', 0, VIRTUAL_HEIGHT/2 + 30, VIRTUAL_WIDTH, 'center')
+        numCursor:render()
+    elseif gameState == 'colorSelect1' then 
+        love.graphics.setFont(smallFont)
+        love.graphics.printf('Select Player1 color!', 0, 20, VIRTUAL_WIDTH, 'center')
+        love.graphics.printf('Blue', 0, VIRTUAL_HEIGHT/2 - 30, VIRTUAL_WIDTH, 'center')
+        love.graphics.printf('Green', 0, VIRTUAL_HEIGHT/2, VIRTUAL_WIDTH, 'center')
+        love.graphics.printf('Red', 0, VIRTUAL_HEIGHT/2 + 30, VIRTUAL_WIDTH, 'center')
+        numCursor:render()
+        
+    elseif gameState == 'colorSelect2' then
+        love.graphics.setFont(smallFont)
+        love.graphics.printf('Select Player2 color!', 0, 20, VIRTUAL_WIDTH, 'center')
+        love.graphics.printf('Blue', 0, VIRTUAL_HEIGHT/2 - 30, VIRTUAL_WIDTH, 'center')
+        love.graphics.printf('Green', 0, VIRTUAL_HEIGHT/2, VIRTUAL_WIDTH, 'center')
+        love.graphics.printf('Red', 0, VIRTUAL_HEIGHT/2 + 30, VIRTUAL_WIDTH, 'center')
+        numCursor:render()
+
     elseif gameState == 'serve' or gameState == 'CPUserve' then
         -- UI messages
         love.graphics.setFont(smallFont)
@@ -540,7 +590,7 @@ function love.draw()
     -- show the score before ball is rendered so it can move over the text
     if gameState == 'intro' then
         -- Only text renderings 
-    elseif gameState == 'diffSelect' then
+    elseif gameState == 'diffSelect' or gameState == 'colorSelect1' or gameState == 'colorSelect2' then
         -- Only text renderings
     else 
         gameDisplay()
