@@ -577,6 +577,9 @@ function love.draw()
         love.graphics.setFont(smallFont)
         love.graphics.printf('Press Enter to go back to the start menu!', 0, 30, VIRTUAL_WIDTH, 'center')
         SERVE_TIMER = 180
+        numCursor:reset()
+        cursor:reset()
+        difficulty = 'impo'
     end
     if gameState == 'CPUserve' and servingPlayer == 2 then
         if SERVE_TIMER > 120 then 
