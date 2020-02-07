@@ -1,6 +1,6 @@
 # Pong - In Lua 
 
-A recreation of the old school version of table tennis, Pong is a beginners representation of gaming with 2D graphics
+Began with Love2D version of the classic game Pong and then modified it to include the features of single player mode, interface with cursor-based control with difficulty and game-based selection.
 
 Addional Functionality includes: 
 * A loading screen that allows you to choose between game modes (Single Player and Two Player)
