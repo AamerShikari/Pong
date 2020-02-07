@@ -2,7 +2,7 @@
 
 Began with Love2D version of the classic game Pong and then modified it to include the features of single player mode, interface with cursor-based control with difficulty and game-based selection.
 
-Addional Functionality includes: 
+A detailed list of additional functionality is listed below with screenshots: 
 * A loading screen that allows you to choose between game modes (Single Player and Two Player)
 
 ![](StartScreen.png)
