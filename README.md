@@ -1,8 +1,8 @@
 # Pong - In Lua 
 
-Began with Love2D version of the classic game Pong and then modified it to include the features of single player mode, interface with cursor-based control with difficulty and game-based selection.
+Made modifications to the classic game pong - All work was done in a Love2D framework that was based off of an initial repository found at https://github.com/games50/pong
 
-A detailed list of additional functionality is listed below with screenshots: 
+The new features are listed below with accompanying screenshots:
 * A loading screen that allows you to choose between game modes (Single Player and Two Player)
 
 ![](StartScreen.png)
