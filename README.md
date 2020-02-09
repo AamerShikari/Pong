@@ -17,7 +17,7 @@ Almost Impossible Mode
 
 * A loading screen that allows you to choose between game modes (Single Player and Two Player)
 
-![](ColorChanging.mov)
+![](StartScreen.png)
 
 Notes for installation/running -> 
 Will require the installation of love2D
