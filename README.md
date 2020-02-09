@@ -19,5 +19,8 @@ Almost Impossible Mode
 
 ![](StartScreen.png)
 
-Notes for installation/running -> 
-Will require the installation of love2D
+Notes for installation/running on MacOS -> 
+* Download the most recent version of Love2D at https://love2d.org/#download
+* Place download in Application folder 
+* Clone repository 
+* Drag repository over Love2D application to load game
