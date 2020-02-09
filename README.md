@@ -4,10 +4,10 @@ Made modifications to the classic game pong - All work was done in a Love2D fram
 
 The new features are listed below with accompanying screenshots:
 * Three difficulty options within single player mode (Easy, Hard, Almost Impossible)
-** Easy Mode
+Easy Mode
 ![](EasyMode.mov)
 
-** ALmost Impossible Mode
+Almost Impossible Mode
 ![](ImpossibleMode.mov)
 
 * Color customization of players paddles 
