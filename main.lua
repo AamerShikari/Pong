@@ -448,6 +448,7 @@ function love.keypressed(key)
                 difficulty = 'impo'
             end 
             numCursor:reset()
+
         elseif gameState == 'colorSelect1' then 
             gameState = 'colorSelect2'
             if numCursor:getOpt() == 0 then 
@@ -465,7 +466,7 @@ function love.keypressed(key)
             end
             numCursor:reset()
         elseif gameState == 'colorSelect2' then 
-            if servingPlayer == 2 then 
+            if cursor:getOpt() == 1 then 
                 gameState = 'CPUserve'
             else 
                 gameState = 'serve' 
@@ -489,7 +490,6 @@ function love.keypressed(key)
             -- game is simply in a restart phase here, but will set the serving
             -- player to the opponent of whomever won for fairness!
             gameState = 'intro'
-
             ball:reset()
 
             -- reset scores to 0
@@ -577,6 +577,9 @@ function love.draw()
         love.graphics.setFont(smallFont)
         love.graphics.printf('Press Enter to go back to the start menu!', 0, 30, VIRTUAL_WIDTH, 'center')
         SERVE_TIMER = 180
+        numCursor:reset()
+        cursor:reset()
+        difficulty = 'impo'
     end
     if gameState == 'CPUserve' and servingPlayer == 2 then
         if SERVE_TIMER > 120 then 
