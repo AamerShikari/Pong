@@ -6,14 +6,14 @@ The new features are listed below with accompanying screenshots:
 * Three difficulty options within single player mode (Easy, Hard, Almost Impossible)
 
 Easy Mode
-![](EasyMode.mov)
+![Easy Mode Gif](EasyMode.mov)
 
 Almost Impossible Mode
-![](ImpossibleMode.mov)
+![Impossible Mode Gif](ImpossibleMode.mov)
 
 * Color customization of players paddles 
 
-![](ColorChanging.mov)
+![Color Changing Gif](ColorChanging.mov)
 
 * A loading screen that allows you to choose between game modes (Single Player and Two Player)
 
