@@ -7,7 +7,7 @@ The new features are listed below with accompanying screenshots:
 
 Easy Mode 
 
-![Easy Mode Gif](EasyMode.mov)
+![Easy Mode Gif](EasyMode.gif)
 
 Almost Impossible Mode
 
