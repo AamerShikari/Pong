@@ -11,11 +11,11 @@ Easy Mode
 
 Almost Impossible Mode
 
-![Impossible Mode Gif](ImpossibleMode.mov)
+![Impossible Mode Gif](ImpossibleMode.gif)
 
 * Color customization of players paddles 
 
-![Color Changing Gif](ColorChanging.mov)
+![Color Changing Gif](ColorChanging.gif)
 
 * A loading screen that allows you to choose between game modes (Single Player and Two Player)
 
